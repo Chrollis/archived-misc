@@ -1,0 +1,5 @@
+# Build
+build/
+
+# Bin
+server/dataset
