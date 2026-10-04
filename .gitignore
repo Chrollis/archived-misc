@@ -1,0 +1,7 @@
+# Everything
+/*/
+!structrio/
+!carross/
+
+# Third_Party
+third_party/
