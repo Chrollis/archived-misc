@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/png">
+        <file>assets/objects/1P.png</file>
+        <file>assets/objects/2P.png</file>
+        <file>assets/objects/domado.png</file>
+        <file>assets/objects/head.png</file>
+        <file>assets/objects/stone.png</file>
+        <file>assets/objects/tinyTail.png</file>
+        <file>assets/objects/tomato.png</file>
+        <file>assets/objects/body.png</file>
+        <file>assets/objects/bodyTurn.png</file>
+    </qresource>
+    <qresource prefix="/title">
+        <file>assets/title/gameOver.png</file>
+        <file>assets/title/paused.png</file>
+        <file>assets/title/title.png</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>assets/tomato.ico</file>
+    </qresource>
+</RCC>
