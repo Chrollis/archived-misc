@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>849</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>849</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>849</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>800</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>3</number>
+    </property>
+    <widget class="QWidget" name="menuPage">
+     <widget class="QLabel" name="titleLabel">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>140</y>
+        <width>801</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+       color: #209020;
+       font-weight: bold;
+       text-shadow: 10px 10px 10px rgba(0.1, 0.5, 0.1, 0.5);
+ }</string>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="res.qrc">:/title/assets/title/title.png</pixmap>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="singleBtn">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>单人模式</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="coworkBtn">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>双人合作</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pvpBtn">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>双人对战</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="dfctBtn">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>难度选择</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="singleRank">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>510</y>
+        <width>100</width>
+        <height>220</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>单人排名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="coworkLabel">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>510</y>
+        <width>100</width>
+        <height>220</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>双人排名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="pvpLabel">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>510</y>
+        <width>100</width>
+        <height>220</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>对战排名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="singleRank_2">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>510</y>
+        <width>100</width>
+        <height>220</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>单人排名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QGraphicsView" name="menuView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
+     <zorder>menuView</zorder>
+     <zorder>singleBtn</zorder>
+     <zorder>coworkBtn</zorder>
+     <zorder>pvpBtn</zorder>
+     <zorder>dfctBtn</zorder>
+     <zorder>singleRank</zorder>
+     <zorder>coworkLabel</zorder>
+     <zorder>pvpLabel</zorder>
+     <zorder>singleRank_2</zorder>
+     <zorder>titleLabel</zorder>
+    </widget>
+    <widget class="QWidget" name="playingPage">
+     <widget class="QGraphicsView" name="playingView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="pausedPage">
+     <widget class="QGraphicsView" name="pausedView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="screenshotLabel">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="pausedLabel">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>140</y>
+        <width>800</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="res.qrc">:/title/assets/title/paused.png</pixmap>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="continueBtn">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>继续游戏</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="backBtn">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>返回菜单</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="gameOverPage">
+     <widget class="QGraphicsView" name="gameOverView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="screenshotLabel_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>800</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="gameOverLabel">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>150</y>
+        <width>800</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="res.qrc">:/title/assets/title/gameOver.png</pixmap>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="backBtn_2">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>返回菜单</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="restartBtn">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>重新开始</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="exitBtn">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>440</y>
+        <width>100</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>退出游戏</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sumLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>360</y>
+        <width>781</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>你得了%1分，于主菜单查看排名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_M">
+    <property name="title">
+     <string>控件(&amp;T)</string>
+    </property>
+    <addaction name="menuAction"/>
+    <addaction name="restartAction"/>
+    <addaction name="pauseAction"/>
+    <addaction name="dfctAction"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction"/>
+   </widget>
+   <addaction name="menu_M"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="menuAction">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/png/assets/objects/tomato.png</normaloff>:/png/assets/objects/tomato.png</iconset>
+   </property>
+   <property name="text">
+    <string>主菜单(&amp;M)</string>
+   </property>
+  </action>
+  <action name="restartAction">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/png/assets/objects/head.png</normaloff>:/png/assets/objects/head.png</iconset>
+   </property>
+   <property name="text">
+    <string>重新开始(&amp;R)</string>
+   </property>
+  </action>
+  <action name="pauseAction">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/png/assets/objects/body.png</normaloff>:/png/assets/objects/body.png</iconset>
+   </property>
+   <property name="text">
+    <string>暂停(&amp;P)</string>
+   </property>
+  </action>
+  <action name="exitAction">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/png/assets/objects/domado.png</normaloff>:/png/assets/objects/domado.png</iconset>
+   </property>
+   <property name="text">
+    <string>退出(&amp;E)</string>
+   </property>
+  </action>
+  <action name="dfctAction">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/png/assets/objects/tinyTail.png</normaloff>:/png/assets/objects/tinyTail.png</iconset>
+   </property>
+   <property name="text">
+    <string>难度选择(&amp;D)</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>
