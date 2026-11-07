@@ -1,0 +1,173 @@
+#include "convolve_layer.hpp"
+#include "language_manager.h"
+
+namespace chr {
+convolve_layer::convolve_layer(size_t in_channels, size_t kernel_size, size_t out_channels, size_t padding, size_t stride, activation_function_type activate_type)
+    : in_channels_(in_channels), kernel_size_(kernel_size), out_channels_(out_channels), padding_(padding), stride_(stride), afunc_(activate_type) {
+    for (size_t i = 0; i < out_channels; ++i) {
+        filters_.emplace_back(in_channels, kernel_size);
+
+        filters_.back().initialize_He(in_channels * kernel_size * kernel_size);
+    }
+}
+std::vector<Eigen::MatrixXd> convolve_layer::forward(const std::vector<Eigen::MatrixXd>& input) {
+    input_ = padding(input, padding_);
+    convolve_outcome_.clear();
+    feature_map_.clear();
+    for (const auto& filter : filters_) {
+        size_t rows = (input_[0].rows() - kernel_size_) / stride_ + 1;
+        size_t cols = (input_[0].cols() - kernel_size_) / stride_ + 1;
+        Eigen::MatrixXd channel_result = Eigen::MatrixXd::Zero(rows, cols);
+
+        for (size_t i = 0; i < in_channels_; ++i) {
+            Eigen::MatrixXd conv_result = convolve(input_[i], filter.kernels[i], stride_);
+            channel_result += conv_result;
+        }
+        channel_result = channel_result.unaryExpr([filter](double a) { return a + filter.bias; });
+        convolve_outcome_.push_back(channel_result);
+        feature_map_.push_back(channel_result.unaryExpr([this](double x) { return afunc_(x); }));
+    }
+    return feature_map_;
+}
+std::vector<Eigen::MatrixXd> convolve_layer::backward(const std::vector<Eigen::MatrixXd>& gradient, double learning_rate, bool is_last_conv) {
+    std::vector<Eigen::MatrixXd> propagated_gradient;
+    if (is_last_conv) {
+        propagated_gradient = gradient;
+    } else {
+        propagated_gradient = apply_activation_derivative(gradient);
+    }
+    std::vector<Eigen::MatrixXd> next_gradient;
+    for (size_t i = 0; i < in_channels_; i++) {
+        Eigen::MatrixXd each_channel = Eigen::MatrixXd::Zero(input_[0].rows(), input_[0].cols());
+        size_t rows = (gradient.front().rows() - 1) * stride_ + kernel_size_;
+        size_t cols = (gradient.front().cols() - 1) * stride_ + kernel_size_;
+        for (size_t j = 0; j < out_channels_; j++) {
+            Eigen::MatrixXd rotated_kernel = filters_[j].kernels[i].reverse();
+            Eigen::MatrixXd upsampled = Eigen::MatrixXd::Zero(rows, cols);
+            for (size_t m = 0; m < gradient.front().rows(); m++) {
+                for (size_t n = 0; n < gradient.front().cols(); n++) {
+                    upsampled(m * stride_, n * stride_) = gradient[j](m, n);
+                }
+            }
+            Eigen::MatrixXd padded = Eigen::MatrixXd::Zero(rows + kernel_size_ - 1, cols + kernel_size_ - 1);
+            padded.block(kernel_size_ / 2, kernel_size_ / 2, rows, cols) = upsampled;
+            each_channel += convolve(padded, rotated_kernel, 1);
+        }
+        next_gradient.push_back(std::move(each_channel));
+    }
+    weights_update(learning_rate, propagated_gradient);
+
+    return remove_padding(next_gradient, padding_);
+}
+void convolve_layer::weights_update(double learning_rate, const std::vector<Eigen::MatrixXd>& gradient) {
+    for (size_t i = 0; i < out_channels_; i++) {
+        for (size_t j = 0; j < in_channels_; j++) {
+            filters_[i].kernels[j] -= learning_rate * convolve(input_[j], gradient[i], 1);
+        }
+
+        filters_[i].bias -= learning_rate * gradient[i].sum();
+    }
+}
+void convolve_layer::save(std::ostream& file) const {
+    uint32_t in_channels = in_channels_;
+    uint32_t kernel_size = kernel_size_;
+    uint32_t out_channels = out_channels_;
+    uint32_t padding = padding_;
+    uint32_t stride = stride_;
+    file.write(reinterpret_cast<const char*>(&in_channels), sizeof(in_channels));
+    file.write(reinterpret_cast<const char*>(&kernel_size), sizeof(kernel_size));
+    file.write(reinterpret_cast<const char*>(&out_channels), sizeof(out_channels));
+    file.write(reinterpret_cast<const char*>(&padding), sizeof(padding));
+    file.write(reinterpret_cast<const char*>(&stride), sizeof(stride));
+
+    for (const auto& filter : filters_) {
+        file.write(reinterpret_cast<const char*>(&filter.bias), sizeof(filter.bias));
+
+        for (size_t i = 0; i < in_channels_; ++i) {
+            for (size_t row = 0; row < kernel_size_; ++row) {
+                for (size_t col = 0; col < kernel_size_; ++col) {
+                    double weight = filter.kernels[i](row, col);
+                    file.write(reinterpret_cast<const char*>(&weight), sizeof(weight));
+                }
+            }
+        }
+    }
+}
+void convolve_layer::load(std::istream& file) {
+    uint32_t in_channels, kernel_size, out_channels, padding, stride;
+    file.read(reinterpret_cast<char*>(&in_channels), sizeof(in_channels));
+    file.read(reinterpret_cast<char*>(&kernel_size), sizeof(kernel_size));
+    file.read(reinterpret_cast<char*>(&out_channels), sizeof(out_channels));
+    file.read(reinterpret_cast<char*>(&padding), sizeof(padding));
+    file.read(reinterpret_cast<char*>(&stride), sizeof(stride));
+
+    if (in_channels != in_channels_ || kernel_size != kernel_size_ || out_channels != out_channels_ || padding != padding_ || stride != stride_) {
+        throw std::runtime_error(chr::tr("error.convolution.parameter_mismatch").toStdString());
+    }
+
+    for (auto& filter : filters_) {
+        file.read(reinterpret_cast<char*>(&filter.bias), sizeof(filter.bias));
+
+        for (size_t i = 0; i < in_channels_; ++i) {
+            for (size_t row = 0; row < kernel_size_; ++row) {
+                for (size_t col = 0; col < kernel_size_; ++col) {
+                    double weight;
+                    file.read(reinterpret_cast<char*>(&weight), sizeof(weight));
+                    filter.kernels[i](row, col) = weight;
+                }
+            }
+        }
+    }
+}
+std::vector<Eigen::MatrixXd> convolve_layer::padding(const std::vector<Eigen::MatrixXd>& input, size_t circle_num, double fill_num) const {
+    std::vector<Eigen::MatrixXd> result;
+    for (const auto& channel : input) {
+        size_t new_rows = channel.rows() + 2 * circle_num;
+        size_t new_cols = channel.cols() + 2 * circle_num;
+        Eigen::MatrixXd padded = Eigen::MatrixXd::Constant(new_rows, new_cols, fill_num);
+
+        padded.block(circle_num, circle_num, channel.rows(), channel.cols()) = channel;
+        result.push_back(padded);
+    }
+    return result;
+}
+Eigen::MatrixXd convolve_layer::convolve(const Eigen::MatrixXd& input, const Eigen::MatrixXd& kernel, size_t stride) const {
+    if (input.rows() < kernel.rows() || input.cols() < kernel.cols()) {
+        throw std::invalid_argument(chr::tr("error.convolution.input_too_small").toStdString());
+    }
+    long output_rows = static_cast<long>((input.rows() - kernel.rows()) / stride) + 1;
+    long output_cols = static_cast<long>((input.cols() - kernel.cols()) / stride) + 1;
+    if (output_rows <= 0 || output_cols <= 0) {
+        throw std::invalid_argument(chr::tr("error.convolution.output_not_positive").toStdString());
+    }
+    Eigen::MatrixXd result = Eigen::MatrixXd::Zero(output_rows, output_cols);
+    Eigen::Map<const Eigen::VectorXd> kernel_flat(kernel.data(), kernel.size());
+    for (long i = 0; i < output_rows; i++) {
+        for (long j = 0; j < output_cols; j++) {
+            long start_row = i * static_cast<long>(stride);
+            long start_col = j * static_cast<long>(stride);
+            if (start_row + kernel.rows() <= input.rows() && start_col + kernel.cols() <= input.cols()) {
+                Eigen::MatrixXd block = input.block(start_row, start_col, kernel.rows(), kernel.cols());
+                Eigen::Map<const Eigen::VectorXd> block_flat(block.data(), block.size());
+                result(i, j) = block_flat.dot(kernel_flat);
+            }
+        }
+    }
+    return result;
+}
+std::vector<Eigen::MatrixXd> convolve_layer::apply_activation_derivative(const std::vector<Eigen::MatrixXd>& gradient) {
+    std::vector<Eigen::MatrixXd> result;
+    for (size_t i = 0; i < gradient.size(); ++i) {
+        result.push_back(gradient[i].cwiseProduct(convolve_outcome_[i].unaryExpr([this](double x) { return afunc_[x]; })));
+    }
+    return result;
+}
+std::vector<Eigen::MatrixXd> convolve_layer::remove_padding(const std::vector<Eigen::MatrixXd>& input, size_t padding) {
+    if (padding == 0) return input;
+    std::vector<Eigen::MatrixXd> result;
+    for (const auto& matrix : input) {
+        result.push_back(matrix.block(padding, padding, matrix.rows() - 2 * padding, matrix.cols() - 2 * padding));
+    }
+    return result;
+}
+}  // namespace chr
